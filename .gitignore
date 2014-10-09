@@ -33,3 +33,6 @@ iisnode.yml
 azure.err
 public/dist/*
 *.min.css
+
+
+.idea/
