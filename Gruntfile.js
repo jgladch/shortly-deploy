@@ -116,11 +116,6 @@ module.exports = function(grunt) {
       }
     },
 
-    shell: {
-      prodServer: {
-      }
-    },
-
     gitpush: {
       azure: {
         options: {
@@ -150,6 +145,14 @@ module.exports = function(grunt) {
     });
     nodemon.stdout.pipe(process.stdout);
     nodemon.stderr.pipe(process.stderr);
+
+    var mongo = grunt.util.spawn({
+      cmd: 'mongod',
+      args: '--dbpath db/mongo'
+    });
+
+    mongo.stdout.pipe(process.stdout);
+    mongo.stderr.pipe(process.stderr);
 
     grunt.task.run([ 'watch' ]);
   });
