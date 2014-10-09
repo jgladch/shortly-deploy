@@ -20,7 +20,7 @@
     "bcrypt-nodejs": "0.0.3",
     "grunt": "^0.4.4",
     "grunt-contrib-jshint": "^0.9.2",
-    "grunt-contrib-concat": "^0.3.0",
+    "grunt-contrib-concat": "^0.5.0",
     "grunt-contrib-uglify": "^0.4.0",
     "grunt-contrib-watch": "^0.6.1",
     "grunt-shell": "^0.6.4",
@@ -31,6 +31,7 @@
     "bluebird": "1.0.8"
   },
   "devDependencies": {
-    "supertest": "^0.10.0"
+    "supertest": "^0.10.0",
+    "grunt-git": "~0.2.14"
   }
 }
