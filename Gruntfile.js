@@ -94,7 +94,23 @@ module.exports = function(grunt) {
         dest: 'public/style.min.css'
       }
     },
-
+    shell: {
+      options: {
+        stdout: true,
+        stderr: true,
+        async: true,
+        failOnError: true
+      },
+      mongodev: {
+        command: 'mongod --dbpath db/mongo'
+      },
+      mongotest: {
+        command: 'mongod --dbpath db/test'
+      },
+      nodemon: {
+        command: 'grunt nodemon'
+      }
+    },
     watch: {
       scripts: {
         files: [
@@ -135,36 +151,36 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-shell');
   grunt.loadNpmTasks('grunt-nodemon');
   grunt.loadNpmTasks('grunt-git');
+  grunt.loadNpmTasks('grunt-shell-spawn');
 
-  grunt.registerTask('server-dev', function (target) {
-    // Running nodejs in a different process and displaying output on the main console
-    var nodemon = grunt.util.spawn({
-         cmd: 'grunt',
-         grunt: true,
-         args: 'nodemon'
-    });
-    nodemon.stdout.pipe(process.stdout);
-    nodemon.stderr.pipe(process.stderr);
-
-    var mongo = grunt.util.spawn({
-      cmd: 'mongod',
-      args: '--dbpath db/mongo'
-    });
-
-    mongo.stdout.pipe(process.stdout);
-    mongo.stderr.pipe(process.stderr);
-
-    grunt.task.run([ 'watch' ]);
-  });
+  grunt.registerTask('server-dev', [ 'shell:nodemon', 'shell:mongodev', 'watch' ]);
 
   ////////////////////////////////////////////////////
   // Main grunt tasks
   ////////////////////////////////////////////////////
 
   grunt.registerTask('test', [
+    'shell:mongotest',
     'jshint',
-    'mochaTest'
+    'force:on',
+    'mochaTest',
+    'force:restore',
+    'shell:mongotest:kill'
   ]);
+
+  var previous_force_state = grunt.option("force");
+
+  grunt.registerTask("force",function(set){
+    if (set === "on") {
+      grunt.option("force",true);
+    }
+    else if (set === "off") {
+      grunt.option("force",false);
+    }
+    else if (set === "restore") {
+      grunt.option("force",previous_force_state);
+    }
+  });
 
   grunt.registerTask('build', [
     'concat',
@@ -173,17 +189,15 @@ module.exports = function(grunt) {
   ]);
 
   grunt.registerTask('upload', function(n) {
+    grunt.task.requires('mochaTest');
     if(grunt.option('prod')) {
       grunt.task.run(['gitpush']);
     } else {
-      grunt.task.run([ 'build', 'server-dev' ]);
+      grunt.task.run(['build', 'server-dev']);
     }
   });
 
-  grunt.registerTask('deploy', [
-      'test',
-      'upload'
-  ]);
+  grunt.registerTask('deploy', ['test', 'upload']);
 
 
 };

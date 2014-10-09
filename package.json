@@ -7,9 +7,6 @@
   "license": "Proprietary",
   "private": true,
   "dependencies": {
-    "knex": "~0.5.7",
-    "bookshelf": "~0.6.4",
-    "sqlite3": "~2.2.0",
     "express": "~3.4.8",
     "express-partials": "~0.2.0",
     "ejs": "~0.8.5",
@@ -31,7 +28,13 @@
     "bluebird": "1.0.8"
   },
   "devDependencies": {
-    "supertest": "^0.10.0",
-    "grunt-git": "~0.2.14"
+    "chai": "^1.9.2",
+    "grunt-contrib-jshint": "^0.9.2",
+    "grunt-git": "~0.2.14",
+    "grunt-mocha-test": "^0.10.2",
+    "grunt-nodemon": "^0.2.1",
+    "grunt-shell-spawn": "^0.3.0",
+    "mocha": "^1.21.4",
+    "supertest": "^0.10.0"
   }
 }
