@@ -36,5 +36,6 @@ public/dist/*
 
 .idea/
 
-db/mongo
-db/test
+db/mongo/*
+db/test/*
+!.gitkeep
